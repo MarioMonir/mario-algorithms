@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jun 25 16:57:47 2019
+
+@author: mario
+"""
+import os , sys , math 
+from collections import Counter
+
+Directory = "documents"
+os.chdir(Directory)
+docs_list = os.listdir()
+docs_list.reverse()
+#print(docs_list)
+
+def doc_calc(doc_name):
+    
+    try:
+        f = open(doc_name, 'r')
+        content = f.read()
+        #print(content)
+        content = content.lower()                 # O(n)
+        content = content.strip()                 # O(n)
+        content = content.replace("\n"," ")       # O(n) 
+        content = content.split(" ")              # O(n)
+        freqs = Counter(content)                  # O(n)
+        #print(content)
+        #print(freqs)
+        f.close()
+        return freqs
+    except IOError:
+        print ("Error opening or reading input file: ",doc_name)
+        sys.exit()
+        
+      
+def vector_angle(doc1_freqs,doc2_freqs):
+    
+    def min_dict(dict1 , dict2):
+        if (len(dict1)>=len(dict2)):
+            return dict2 , dict1
+        else:
+            return dict1 , dict2
+    
+
+    def inner_product(doc1_freqs,docs2_freqs):
+        doc1 , doc2 = min_dict(doc1_freqs,doc2_freqs)
+        inner_product = 0
+        for key  in doc1:
+            if key in doc2:
+                inner_product += doc1[key]*doc2[key]
+        return inner_product   
+
+    num = inner_product(doc1_freqs,doc2_freqs)
+    n1 = inner_product(doc1_freqs , doc1_freqs) 
+    n2 = inner_product(doc2_freqs,doc2_freqs)            
+    den  = math.sqrt(n1*n2)
+
+    #print(doc1_freqs)
+    #print(doc2_freqs)
+    #print("inner product =  " , num)
+    #print("norm1         =  " , n1)
+    #print("norm2         =  " , n2)
+    #print ("den          =  " , math.sqrt(n1*n2))
+
+    vector_angle =  math.acos( num / den )
+    return vector_angle 
+
+d1 = docs_list[0]
+d2 = docs_list[1]
+
+def documents_distance(d1,d2):
+    d1 = doc_calc(d1)
+    d2 = doc_calc(d2)
+    return vector_angle(d1,d2)
+
+
+print(documents_distance(d1,d2))
+
+    
+
+   
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
+
+
+
+
